@@ -8,10 +8,10 @@ public class SpawnerScript : MonoBehaviour
 
     [Header("Blocks")]
     public GameObject[] blocks;
-    public GameObject selectBlock;
+    public GameObject selectedBlock;
 
     [Header("Block Spawn")]
-    private bool canSpawnBlock = false;
+    [SerializeField] private bool canSpawnBlock = true;
     [SerializeField] private Transform spawnLocation;
 
 
@@ -22,16 +22,16 @@ public class SpawnerScript : MonoBehaviour
 
     void Start() {
 
-        spawnLocation.transform.position = new Vector3(5, 18);
+
         if (canSpawnBlock) {
-            SpawnBlock(spawnLocation);
+            SpawnBlock(spawnLocation,selectedBlock);
         }
     }
 
-    private void SpawnBlock(Transform spawnLocation) {
+    private void SpawnBlock(Transform spawnLocation, GameObject selectedBlock) {
         int selectBlockIndex = UnityEngine.Random.Range(0, blocks.Length);
-        selectBlock = blocks[selectBlockIndex];
-        Instantiate(selectBlock, spawnLocation);
+        selectedBlock = blocks[selectBlockIndex];
+        Instantiate(selectedBlock, spawnLocation);
         canSpawnBlock = false;
     }
 }

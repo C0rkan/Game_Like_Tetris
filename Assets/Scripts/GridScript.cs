@@ -11,8 +11,7 @@ public class GridScript : MonoBehaviour
     [Header("Time")]
     [SerializeField] private float timePassed = 0;
 
-    void Start()
-    {
+    private void Awake() {
         grids = new Transform[width, height];
     }
 

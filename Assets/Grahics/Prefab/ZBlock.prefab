@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4325336101489237652}
   - component: {fileID: 5262136160729893653}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BlueBlock (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8411794623677557172}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ZBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4605237407085686862}
   - component: {fileID: 6478526391439043472}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BlueBlock (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3611636490340834659}
   - component: {fileID: 8324126218389449322}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BlueBlock (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -321,7 +321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3592648041984291610}
   - component: {fileID: 2167377580670619760}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BlueBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
