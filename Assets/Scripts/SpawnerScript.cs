@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SpawnerScript : MonoBehaviour
@@ -7,6 +8,7 @@ public class SpawnerScript : MonoBehaviour
 
     [Header("Blocks")]
     public GameObject[] blocks;
+    public GameObject selectBlock;
 
     [Header("Block Spawn")]
     private bool canSpawnBlock = false;
@@ -27,6 +29,9 @@ public class SpawnerScript : MonoBehaviour
     }
 
     private void SpawnBlock(Transform spawnLocation) {
-
+        int selectBlockIndex = UnityEngine.Random.Range(0, blocks.Length);
+        selectBlock = blocks[selectBlockIndex];
+        Instantiate(selectBlock, spawnLocation);
+        canSpawnBlock = false;
     }
 }
