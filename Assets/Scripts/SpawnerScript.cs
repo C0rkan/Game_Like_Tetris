@@ -21,7 +21,7 @@ public class SpawnerScript : MonoBehaviour
 
 
     [Header("Block Selecting")]
-    public GameObject currentBlock = null;
+    public GameObject currentBlock;
     public GameObject nextBlock = null;
     public GameObject holdedBlock = null;
     public bool anyBlockHolded = false;
@@ -38,6 +38,7 @@ public class SpawnerScript : MonoBehaviour
         Instantiate(selectedBlock, spawnLocation.position,quaternion.identity);
         currentBlock = selectedBlock;
         selectedBlock = null;
+
         Randomizer();
         nextBlock = selectedBlock;
         selectedBlock = null;

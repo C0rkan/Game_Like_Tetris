@@ -85,15 +85,148 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
     public @TetrisControls()
     {
         asset = InputActionAsset.FromJson(@"{
-    ""version"": 0,
+    ""version"": 1,
     ""name"": ""TetrisControls"",
-    ""maps"": [],
+    ""maps"": [
+        {
+            ""name"": ""Tetris Player"",
+            ""id"": ""b12552e2-df9a-4dda-9c70-9ab1943f87fc"",
+            ""actions"": [
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Button"",
+                    ""id"": ""78d5c591-62ea-4423-9285-547ac10cbd0f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Button"",
+                    ""id"": ""67a0f093-1373-45e5-99a1-263972f9da1a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""Hold"",
+                    ""type"": ""Button"",
+                    ""id"": ""62c2b9a6-9a39-4cf4-b471-22b0280eb9ab"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""eda83b68-cbce-44e6-a2d0-0c2fa1d08f4c"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""05fa4fc7-010d-44cd-8492-53959b82934d"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6fcabca5-abb1-46e1-a793-23d8f35f14dd"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f18e4ed-a5a7-4699-9034-fcd1ee301428"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4233f3d8-1efc-42b3-b8e0-d349b3dfb15f"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d1906d1-fc1b-4db3-87f3-b83557b6d769"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b7bb743d-3f4a-4816-bd74-b2b5e5129365"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dacc42e3-8c4b-4088-8c1d-7de3a792fbb2"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        }
+    ],
     ""controlSchemes"": []
 }");
+        // Tetris Player
+        m_TetrisPlayer = asset.FindActionMap("Tetris Player", throwIfNotFound: true);
+        m_TetrisPlayer_Movement = m_TetrisPlayer.FindAction("Movement", throwIfNotFound: true);
+        m_TetrisPlayer_Rotate = m_TetrisPlayer.FindAction("Rotate", throwIfNotFound: true);
+        m_TetrisPlayer_Hold = m_TetrisPlayer.FindAction("Hold", throwIfNotFound: true);
     }
 
     ~@TetrisControls()
     {
+        UnityEngine.Debug.Assert(!m_TetrisPlayer.enabled, "This will cause a leak and performance issues, TetrisControls.TetrisPlayer.Disable() has not been called.");
     }
 
     /// <summary>
@@ -164,5 +297,152 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
     public int FindBinding(InputBinding bindingMask, out InputAction action)
     {
         return asset.FindBinding(bindingMask, out action);
+    }
+
+    // Tetris Player
+    private readonly InputActionMap m_TetrisPlayer;
+    private List<ITetrisPlayerActions> m_TetrisPlayerActionsCallbackInterfaces = new List<ITetrisPlayerActions>();
+    private readonly InputAction m_TetrisPlayer_Movement;
+    private readonly InputAction m_TetrisPlayer_Rotate;
+    private readonly InputAction m_TetrisPlayer_Hold;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Tetris Player".
+    /// </summary>
+    public struct TetrisPlayerActions
+    {
+        private @TetrisControls m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public TetrisPlayerActions(@TetrisControls wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "TetrisPlayer/Movement".
+        /// </summary>
+        public InputAction @Movement => m_Wrapper.m_TetrisPlayer_Movement;
+        /// <summary>
+        /// Provides access to the underlying input action "TetrisPlayer/Rotate".
+        /// </summary>
+        public InputAction @Rotate => m_Wrapper.m_TetrisPlayer_Rotate;
+        /// <summary>
+        /// Provides access to the underlying input action "TetrisPlayer/Hold".
+        /// </summary>
+        public InputAction @Hold => m_Wrapper.m_TetrisPlayer_Hold;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_TetrisPlayer; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="TetrisPlayerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(TetrisPlayerActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="TetrisPlayerActions" />
+        public void AddCallbacks(ITetrisPlayerActions instance)
+        {
+            if (instance == null || m_Wrapper.m_TetrisPlayerActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_TetrisPlayerActionsCallbackInterfaces.Add(instance);
+            @Movement.started += instance.OnMovement;
+            @Movement.performed += instance.OnMovement;
+            @Movement.canceled += instance.OnMovement;
+            @Rotate.started += instance.OnRotate;
+            @Rotate.performed += instance.OnRotate;
+            @Rotate.canceled += instance.OnRotate;
+            @Hold.started += instance.OnHold;
+            @Hold.performed += instance.OnHold;
+            @Hold.canceled += instance.OnHold;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="TetrisPlayerActions" />
+        private void UnregisterCallbacks(ITetrisPlayerActions instance)
+        {
+            @Movement.started -= instance.OnMovement;
+            @Movement.performed -= instance.OnMovement;
+            @Movement.canceled -= instance.OnMovement;
+            @Rotate.started -= instance.OnRotate;
+            @Rotate.performed -= instance.OnRotate;
+            @Rotate.canceled -= instance.OnRotate;
+            @Hold.started -= instance.OnHold;
+            @Hold.performed -= instance.OnHold;
+            @Hold.canceled -= instance.OnHold;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="TetrisPlayerActions.UnregisterCallbacks(ITetrisPlayerActions)" />.
+        /// </summary>
+        /// <seealso cref="TetrisPlayerActions.UnregisterCallbacks(ITetrisPlayerActions)" />
+        public void RemoveCallbacks(ITetrisPlayerActions instance)
+        {
+            if (m_Wrapper.m_TetrisPlayerActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="TetrisPlayerActions.AddCallbacks(ITetrisPlayerActions)" />
+        /// <seealso cref="TetrisPlayerActions.RemoveCallbacks(ITetrisPlayerActions)" />
+        /// <seealso cref="TetrisPlayerActions.UnregisterCallbacks(ITetrisPlayerActions)" />
+        public void SetCallbacks(ITetrisPlayerActions instance)
+        {
+            foreach (var item in m_Wrapper.m_TetrisPlayerActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_TetrisPlayerActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="TetrisPlayerActions" /> instance referencing this action map.
+    /// </summary>
+    public TetrisPlayerActions @TetrisPlayer => new TetrisPlayerActions(this);
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Tetris Player" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="TetrisPlayerActions.AddCallbacks(ITetrisPlayerActions)" />
+    /// <seealso cref="TetrisPlayerActions.RemoveCallbacks(ITetrisPlayerActions)" />
+    public interface ITetrisPlayerActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Movement" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMovement(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Rotate" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRotate(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Hold" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHold(InputAction.CallbackContext context);
     }
 }
