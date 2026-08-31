@@ -1,4 +1,6 @@
+using System.Collections.Concurrent;
 using UnityEngine;
+using UnityEngine.Assemblies;
 
 public class GridScript : MonoBehaviour
 {
@@ -9,7 +11,7 @@ public class GridScript : MonoBehaviour
     [SerializeField] private int height;
 
     [Header("Time")]
-    [SerializeField] private float timePassed = 0;
+    public float timePassed = 0;
 
     private void Awake() {
         grids = new Transform[width, height];
@@ -18,7 +20,7 @@ public class GridScript : MonoBehaviour
 
     void Update()
     {
-
+        
         timePassed += Time.deltaTime;
 
     }
