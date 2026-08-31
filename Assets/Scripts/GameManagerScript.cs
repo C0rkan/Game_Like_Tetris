@@ -11,7 +11,7 @@ public class GameManagerScript : MonoBehaviour
 
     [Header("Gravity")]
     private float fallTimer = 0;
-    private float fallTime = .8f;
+    private float fallTime = 1;
 
 
     private void Awake() {
@@ -58,12 +58,62 @@ public class GameManagerScript : MonoBehaviour
             if (!isPositionAvailable(spawner.currentBlock.transform)) {
                 spawner.currentBlock.transform.position += new Vector3(0, 1, 0);
                 AddToGrid(spawner.currentBlock.transform);
-
+                LineCheck();
                 spawner.SpawnBlock(spawner.spawnLocation);
             }
             fallTimer = 0;
         }
     }
+    //Satýr dololuk kontrol
+    private void LineCheck() {
+        
+        for (int y = 0; y < GridScript.height; y++) {
+            if (IsLineFull(y)) {
+                LineDestroy(y);
+                DropLine(y + 1); // +1 çünkü bir üstten düþüyoruz. 
+                
+                y--; //silinen satýr var ise yerine döneni de kontrol etmek için 
+            }
+        }
+    }
+
+    //Satýr dolu mu ?
+    private bool IsLineFull(int y) {
+
+        for (int x = 0; x < GridScript.width; x++) {
+            if (GridScript.grids[x,y] == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    //Bir sartýrý silmek için
+    private void LineDestroy(int y) {
+        for (int x = 0; x < GridScript.width; x++) {
+            //Ýlgili matristeki dolu alanlarý sileceðiz.
+            Destroy(GridScript.grids[x, y].gameObject);
+            //Silinen alanlarý boþ olarak geri tanýmlýyoruz.
+            GridScript.grids[x,y]= null;
+        }
+    }
+
+    private void DropLine(int startY) {
+
+        for (int y = startY; y < GridScript.height; y++) {
+            for (int x = 0; x < GridScript.width; x++) {
+
+                if (GridScript.grids[x, y] != null) {
+                    //Matris olarak aþþaðý indirir. 
+                    GridScript.grids[x, y - 1] = GridScript.grids[x, y];
+                    GridScript.grids[x,y] = null;
+                    //Fiziki olarak aþþaðý indirir. 
+                    GridScript.grids[x,y-1].position += new Vector3(0,-1,0);
+                }
+            }
+        }
+    }
+
 
     private void AddToGrid(Transform blockTransform) {
 
@@ -89,13 +139,29 @@ public class GameManagerScript : MonoBehaviour
 
 
     private void MoveBlocks() {
-
+        MoveRight();
+        MoveLeft();
     }
 
     private void MoveRight() {
         GameObject chosenBlock = spawner.currentBlock;
         if (chosenBlock != null) {
+            chosenBlock.transform.position += new Vector3(1, 0, 0);
 
+            if (!isPositionAvailable(chosenBlock.transform)) {
+                chosenBlock.transform.position += new Vector3(-1, 0, 0);
+            }
+        }
+    }
+
+    private void MoveLeft() {
+        GameObject chosenBlock = spawner.currentBlock;
+        if (chosenBlock != null) {
+            chosenBlock.transform.position += new Vector3(-1, 0, 0);
+
+            if (!isPositionAvailable(chosenBlock.transform)) {
+                chosenBlock.transform.position += new Vector3(1, 0, 0);
+            }
         }
     }
 
