@@ -6,9 +6,6 @@ using UnityEngine.InputSystem;
 
 public class SpawnerScript : MonoBehaviour
 {
-    public SpawnerScript() {
-    }
-
 
     [Header("Blocks")]
     public GameObject[] blocks;
@@ -17,7 +14,7 @@ public class SpawnerScript : MonoBehaviour
 
     [Header("Block Spawn")]
     public bool canSpawnBlock = true;
-    [SerializeField] private Transform spawnLocation;
+    public Transform spawnLocation;
 
 
     [Header("Block Selecting")]
@@ -33,10 +30,9 @@ public class SpawnerScript : MonoBehaviour
         }
     }
 
-    private void SpawnBlock(Transform spawnLocation) {
+    public void SpawnBlock(Transform spawnLocation) {
         Randomizer();
-        Instantiate(selectedBlock, spawnLocation.position,quaternion.identity);
-        currentBlock = selectedBlock;
+        currentBlock = Instantiate(selectedBlock, spawnLocation.position, Quaternion.identity);
         selectedBlock = null;
 
         Randomizer();

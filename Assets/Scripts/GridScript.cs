@@ -9,9 +9,9 @@ public class GridScript : MonoBehaviour
     private PlayerInput input;
 
     [Header("Grid Size")]
-    [SerializeField] private Transform[,] grids;
-    [SerializeField] private int width;
-    [SerializeField] private int height;
+    public static Transform[,] grids;
+    public static int width = 10;
+    public static int height = 20;
 
     [Header("Time")]
     public float timePassed = 0;
