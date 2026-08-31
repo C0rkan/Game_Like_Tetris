@@ -2,15 +2,19 @@ using UnityEngine;
 using Unity;
 using UnityEngine.InputSystem;
 using System;
+using UnityEditor.Experimental.GraphView;
+using NUnit.Framework.Constraints;
 
 
 public class GameManagerScript : MonoBehaviour
 {
     public SpawnerScript spawner { get; }
-    public PlayerInput input;
+    public TetrisControls tetrisControls;
 
     private void Awake() {
-        input = GetComponent<PlayerInput>();
+        tetrisControls = new TetrisControls();
+        tetrisControls.
+
     }
 
     private void HoldBlock() {
@@ -19,6 +23,14 @@ public class GameManagerScript : MonoBehaviour
     
     
     private void RotateBlocks() {
+        
+    }
+
+    private void OnEnable() {
+        
+    }
+
+    private void OnDisable() {
         
     }
 }

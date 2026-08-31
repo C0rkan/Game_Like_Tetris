@@ -1,9 +1,12 @@
 using System.Collections.Concurrent;
 using UnityEngine;
 using UnityEngine.Assemblies;
+using UnityEngine.InputSystem;
 
 public class GridScript : MonoBehaviour
 {
+
+    private PlayerInput input;
 
     [Header("Grid Size")]
     [SerializeField] private Transform[,] grids;
@@ -14,7 +17,9 @@ public class GridScript : MonoBehaviour
     public float timePassed = 0;
 
     private void Awake() {
+        
         grids = new Transform[width, height];
+
     }
 
 
