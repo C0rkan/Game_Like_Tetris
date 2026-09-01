@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,7 +22,7 @@ public class GameManagerScript : MonoBehaviour
 
         tetrisControls.TetrisPlayer.Rotate.performed += context => RotateBlocks();
         tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlock();
-        tetrisControls.TetrisPlayer.Movement.performed += context => MoveBlocks();
+        tetrisControls.TetrisPlayer.Movement.performed += context => MoveBlocks(context);
     }
 
     private void Update() {
@@ -138,34 +139,22 @@ public class GameManagerScript : MonoBehaviour
     }
 
 
-    private void MoveBlocks() {
-        MoveRight();
-        MoveLeft();
-    }
+    private void MoveBlocks(InputAction.CallbackContext context) {
 
-    private void MoveRight() {
-        GameObject chosenBlock = spawner.currentBlock;
-        if (chosenBlock != null) {
-            chosenBlock.transform.position += new Vector3(1, 0, 0);
+        if (spawner == null || spawner.currentBlock == null) return;
 
-            if (!isPositionAvailable(chosenBlock.transform)) {
-                chosenBlock.transform.position += new Vector3(-1, 0, 0);
-            }
+        //Alýnan girdinin 1 veya -1 olduðunu anlamak için. 
+        float xDirection = context.ReadValue<Vector2>().x;
+
+        Vector3 move = new Vector3(Mathf.RoundToInt(xDirection),0,0);
+
+        spawner.currentBlock.transform.position += move;
+
+        if (!isPositionAvailable(spawner.currentBlock.transform)) {
+            spawner.currentBlock.transform.position -= move;
         }
     }
-
-    private void MoveLeft() {
-        GameObject chosenBlock = spawner.currentBlock;
-        if (chosenBlock != null) {
-            chosenBlock.transform.position += new Vector3(-1, 0, 0);
-
-            if (!isPositionAvailable(chosenBlock.transform)) {
-                chosenBlock.transform.position += new Vector3(1, 0, 0);
-            }
-        }
-    }
-
-
+   
     private void HoldBlock() {
         
     }
