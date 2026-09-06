@@ -1,4 +1,9 @@
+using NUnit.Framework;
 using NUnit.Framework.Constraints;
+using NUnit.Framework.Internal.Commands;
+using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -122,21 +127,33 @@ public class GameManagerScript : MonoBehaviour
 
     private void AddToGrid(Transform blockTransform) {
 
+        //Parent silindiðinde bozulmamasý için objeleri listeye alýyoruz. 
+        List<Transform> childrens = new List<Transform>();
         foreach (Transform child in blockTransform) {
+            childrens.Add(child);
+        }
+
+        foreach (Transform child in childrens) {
 
             int roundToX = Mathf.RoundToInt(child.position.x);
             int roundToY = Mathf.RoundToInt(child.position.y);
             
             if (roundToX >= 0 && roundToX < GridScript.width && roundToY >= 0 && roundToX < GridScript.height) {
                 GridScript.grids[roundToX,roundToY] = child;
+                child.parent = null;
             }
         }
+        Destroy(blockTransform.gameObject);
 
     }
 
     private void RotateBlocks() {
         
         if (spawner.currentBlock != null) {
+            if (spawner.currentBlock.name.Contains("SquareBlock")) {
+                return;
+            }
+
             int rotationScale = 90;
             spawner.currentBlock.transform.Rotate(0, 0, rotationScale);
         }
