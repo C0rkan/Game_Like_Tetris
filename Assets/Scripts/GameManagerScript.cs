@@ -9,6 +9,8 @@ public class GameManagerScript : MonoBehaviour
 {
     public SpawnerScript spawner { get; private set; }
     private TetrisControls tetrisControls;
+    private GameObject emptyGameObj;
+
 
     [Header("Gravity")]
     private float fallTimer = 0;
@@ -22,12 +24,13 @@ public class GameManagerScript : MonoBehaviour
 
         tetrisControls.TetrisPlayer.Rotate.performed += context => RotateBlocks();
         tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlock();
-        tetrisControls.TetrisPlayer.Movement.performed += context => MoveBlocks(context);
+        tetrisControls.TetrisPlayer.Movement.started += context => MoveBlocks(context);
     }
 
     private void Update() {
         fallTimer += Time.deltaTime;
         GraviyForBlocks();
+
     }
 
     public bool isPositionAvailable(Transform blockTransform) {
@@ -41,10 +44,11 @@ public class GameManagerScript : MonoBehaviour
                 return false;
             }
 
-            else if (GridScript.grids[roundToX,roundToY] != null ) {
-                return false;
+            if (roundToY < GridScript.height) {
+                if (GridScript.grids[roundToX, roundToY] != null) {
+                    return false;
+                }
             }
-
         }
         return true;
     }
@@ -145,14 +149,22 @@ public class GameManagerScript : MonoBehaviour
 
         //Alýnan girdinin 1 veya -1 olduðunu anlamak için. 
         float xDirection = context.ReadValue<Vector2>().x;
+        float yDirection = context.ReadValue<Vector2>().y;
 
         Vector3 move = new Vector3(Mathf.RoundToInt(xDirection),0,0);
+        Vector3 moveY = new Vector3(0, Mathf.RoundToInt(yDirection), 0);
 
         spawner.currentBlock.transform.position += move;
+        spawner.currentBlock.transform.position += moveY;
+
 
         if (!isPositionAvailable(spawner.currentBlock.transform)) {
             spawner.currentBlock.transform.position -= move;
         }
+        if (!isPositionAvailable(spawner.currentBlock.transform)) {
+            spawner.currentBlock.transform.position -= moveY;
+        }
+
     }
    
     private void HoldBlock() {
