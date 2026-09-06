@@ -148,12 +148,10 @@ public class GameManagerScript : MonoBehaviour
     }
 
     private void RotateBlocks() {
-        
         if (spawner.currentBlock != null) {
             if (spawner.currentBlock.name.Contains("SquareBlock")) {
                 return;
             }
-
             int rotationScale = 90;
             spawner.currentBlock.transform.Rotate(0, 0, rotationScale);
         }
