@@ -4,8 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SpawnerScript : MonoBehaviour
-{
+public class SpawnerScript : MonoBehaviour {
 
     [Header("Blocks")]
     public GameObject[] blocks;
@@ -15,7 +14,8 @@ public class SpawnerScript : MonoBehaviour
     [Header("Block Spawn")]
     public bool canSpawnBlock = true;
     public Transform spawnLocation;
-
+    public Transform holdBlockPosition;
+    public Transform nextBlockPosition;
 
     [Header("Block Selecting")]
     public GameObject currentBlock;
@@ -23,23 +23,30 @@ public class SpawnerScript : MonoBehaviour
     public GameObject holdedBlock = null;
     public bool anyBlockHolded = false;
 
-    void Start() {
 
+    private void Update() {
         if (canSpawnBlock && currentBlock == null) {
             SpawnBlock(spawnLocation);
         }
+        SpawnNextBlock(nextBlockPosition);
     }
 
     public void SpawnBlock(Transform spawnLocation) {
-        Randomizer();
-        currentBlock = Instantiate(selectedBlock, spawnLocation.position, Quaternion.identity);
-        selectedBlock = null;
-
-        Randomizer();
-        nextBlock = selectedBlock;
-        selectedBlock = null;
-
+        if (currentBlock == null) {
+            Randomizer();
+            currentBlock = Instantiate(selectedBlock, spawnLocation.position, Quaternion.identity);
+            selectedBlock = null;
+            
+        }
         canSpawnBlock = false;
+    }
+
+    private void SpawnNextBlock(Transform nextBloakPosition) {
+        if (nextBlock == null) {
+            Randomizer();
+            nextBlock = Instantiate(selectedBlock, nextBlockPosition.position, Quaternion.identity);
+            selectedBlock = null;
+        }
     }
 
     private void Randomizer() {

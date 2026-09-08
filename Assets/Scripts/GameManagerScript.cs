@@ -6,6 +6,7 @@ using System.Reflection.Metadata.Ecma335;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 using UnityEngine.InputSystem;
 
 
@@ -14,7 +15,8 @@ public class GameManagerScript : MonoBehaviour
 {
     public SpawnerScript spawner { get; private set; }
     private TetrisControls tetrisControls;
-    private GameObject emptyGameObj;
+    
+
 
 
     [Header("Gravity")]
@@ -28,7 +30,17 @@ public class GameManagerScript : MonoBehaviour
 
 
         tetrisControls.TetrisPlayer.Rotate.performed += context => RotateBlocks();
-        tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlock();
+        if (1 == 1) {
+            if (spawner.anyBlockHolded == true) {
+                HoldBlockRelase();
+            }
+            if (spawner.anyBlockHolded == false) {
+                HoldBlock();
+            }
+            tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlock();
+            tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlockRelase();
+
+        }
         tetrisControls.TetrisPlayer.Movement.started += context => MoveBlocks(context);
     }
 
@@ -145,6 +157,10 @@ public class GameManagerScript : MonoBehaviour
         }
         Destroy(blockTransform.gameObject);
 
+        spawner.currentBlock = spawner.nextBlock;
+        spawner.nextBlock.transform.position = spawner.spawnLocation.position;
+        spawner.nextBlock = null;
+        spawner.canSpawnBlock = true;
     }
 
     private void RotateBlocks() {
@@ -152,7 +168,7 @@ public class GameManagerScript : MonoBehaviour
             if (spawner.currentBlock.name.Contains("SquareBlock")) {
                 return;
             }
-            int rotationScale = 90;
+            int rotationScale = -90;
             spawner.currentBlock.transform.Rotate(0, 0, rotationScale);
         }
     }
@@ -183,7 +199,25 @@ public class GameManagerScript : MonoBehaviour
     }
    
     private void HoldBlock() {
-        
+        if (spawner.currentBlock != null && spawner.holdedBlock == null && spawner.anyBlockHolded == false) {
+            spawner.holdedBlock = spawner.currentBlock;
+            //spawner.holdedBlock.transform.position = spawner.holdBlockPosition.position;
+            //spawner.currentBlock = spawner.nextBlock;
+            //spawner.nextBlock = null;
+            spawner.anyBlockHolded = true;
+        }
+    }
+
+    private void HoldBlockRelase() {
+        if (spawner.currentBlock != null && spawner.holdedBlock != null && spawner.anyBlockHolded == true) {
+            spawner.currentBlock = spawner.holdedBlock;
+            spawner.holdedBlock.transform.position = spawner.spawnLocation.position;
+            Destroy(spawner.currentBlock);
+
+
+            spawner.canSpawnBlock = true;
+            spawner.anyBlockHolded = false;
+        }
     }
     
 
