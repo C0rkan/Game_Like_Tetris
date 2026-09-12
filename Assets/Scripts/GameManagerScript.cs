@@ -1,8 +1,11 @@
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using NUnit.Framework.Internal.Commands;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Reflection.Metadata.Ecma335;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -15,9 +18,10 @@ public class GameManagerScript : MonoBehaviour
 {
     public SpawnerScript spawner { get; private set; }
     private TetrisControls tetrisControls;
-    bool canFastDrop = true;
+    public TextMeshProUGUI scoreTxt;
+    public TextMeshProUGUI timeTxt;
 
-
+    private float timePassed;
 
     [Header("Gravity")]
     private float fallTimer = 0;
@@ -27,7 +31,7 @@ public class GameManagerScript : MonoBehaviour
     private void Awake() {
         tetrisControls = new TetrisControls();
         spawner = FindAnyObjectByType<SpawnerScript>();
-
+        
 
         tetrisControls.TetrisPlayer.Rotate.performed += context => RotateBlocks();
         tetrisControls.TetrisPlayer.Movement.started += context => MoveBlocks(context);
@@ -39,7 +43,7 @@ public class GameManagerScript : MonoBehaviour
     private void Update() {
         fallTimer += Time.deltaTime;
         GraviyForBlocks();
-
+        TimeManager();
     }
 
     public bool isPositionAvailable(Transform blockTransform) {
@@ -212,9 +216,10 @@ public class GameManagerScript : MonoBehaviour
         if (spawner.currentBlock != null && spawner.holdedBlock == null && !spawner.anyBlockHolded) {
             spawner.holdedBlock = spawner.currentBlock;
             spawner.holdedBlock.transform.position = spawner.holdBlockPosition.position;
+            
             spawner.currentBlock = spawner.nextBlock;
             spawner.currentBlock.transform.position = spawner.spawnLocation.position;
-
+            spawner.holdedBlock.transform.rotation = Quaternion.identity;
             spawner.anyBlockHolded = true;
             spawner.nextBlock = null;
         }
@@ -226,6 +231,19 @@ public class GameManagerScript : MonoBehaviour
             spawner.currentBlock.transform.position = spawner.spawnLocation.position;
             spawner.holdedBlock.transform.position = spawner.holdBlockPosition.position;
         }
+    }
+
+    private void TimeManager() {
+        timePassed += Time.deltaTime;
+
+        int min = Mathf.FloorToInt(timePassed / 60);
+        int sec = Mathf.FloorToInt(timePassed % 60);
+
+        timeTxt.text = "Time : " + string.Format("{0:00}:{1:00}",min, sec);
+    }
+
+    private void ScoreManager() {
+
     }
     
     private void OnEnable() {

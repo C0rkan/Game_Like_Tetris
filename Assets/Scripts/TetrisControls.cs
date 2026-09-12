@@ -148,7 +148,7 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""dacc42e3-8c4b-4088-8c1d-7de3a792fbb2"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/c"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

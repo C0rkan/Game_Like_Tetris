@@ -13,20 +13,10 @@ public class GridScript : MonoBehaviour
     public static int width = 10;
     public static int height = 20;
 
-    [Header("Time")]
-    public float timePassed = 0;
 
     private void Awake() {
         
         grids = new Transform[width, height];
-
-    }
-
-
-    void Update()
-    {
-        
-        timePassed += Time.deltaTime;
 
     }
 }
