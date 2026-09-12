@@ -584,6 +584,8 @@ MonoBehaviour:
   - {fileID: 5867943580751347666, guid: 43fc4725261289f4c8a2bcc4b200d755, type: 3}
   canSpawnBlock: 1
   spawnLocation: {fileID: 850415122}
+  holdBlockPosition: {fileID: 0}
+  nextBlockPosition: {fileID: 0}
   currentBlock: {fileID: 0}
   nextBlock: {fileID: 0}
   holdedBlock: {fileID: 0}

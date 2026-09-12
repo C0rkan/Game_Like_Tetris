@@ -104,8 +104,18 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Rotate"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""67a0f093-1373-45e5-99a1-263972f9da1a"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true,
+                    ""priority"": 0
+                },
+                {
+                    ""name"": ""Hold"",
+                    ""type"": ""Button"",
+                    ""id"": ""62c2b9a6-9a39-4cf4-b471-22b0280eb9ab"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -113,9 +123,9 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
                     ""priority"": 0
                 },
                 {
-                    ""name"": ""Hold"",
+                    ""name"": ""HoldRelase"",
                     ""type"": ""Button"",
-                    ""id"": ""62c2b9a6-9a39-4cf4-b471-22b0280eb9ab"",
+                    ""id"": ""d94166b2-3819-4583-9d8f-7c32fbfa7fa4"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -143,6 +153,17 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Hold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dfd4559b-3e36-46eb-b555-a108264790fc"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldRelase"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -233,6 +254,7 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
         m_TetrisPlayer_Movement = m_TetrisPlayer.FindAction("Movement", throwIfNotFound: true);
         m_TetrisPlayer_Rotate = m_TetrisPlayer.FindAction("Rotate", throwIfNotFound: true);
         m_TetrisPlayer_Hold = m_TetrisPlayer.FindAction("Hold", throwIfNotFound: true);
+        m_TetrisPlayer_HoldRelase = m_TetrisPlayer.FindAction("HoldRelase", throwIfNotFound: true);
     }
 
     ~@TetrisControls()
@@ -316,6 +338,7 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_TetrisPlayer_Movement;
     private readonly InputAction m_TetrisPlayer_Rotate;
     private readonly InputAction m_TetrisPlayer_Hold;
+    private readonly InputAction m_TetrisPlayer_HoldRelase;
     /// <summary>
     /// Provides access to input actions defined in input action map "Tetris Player".
     /// </summary>
@@ -339,6 +362,10 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "TetrisPlayer/Hold".
         /// </summary>
         public InputAction @Hold => m_Wrapper.m_TetrisPlayer_Hold;
+        /// <summary>
+        /// Provides access to the underlying input action "TetrisPlayer/HoldRelase".
+        /// </summary>
+        public InputAction @HoldRelase => m_Wrapper.m_TetrisPlayer_HoldRelase;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -374,6 +401,9 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
             @Hold.started += instance.OnHold;
             @Hold.performed += instance.OnHold;
             @Hold.canceled += instance.OnHold;
+            @HoldRelase.started += instance.OnHoldRelase;
+            @HoldRelase.performed += instance.OnHoldRelase;
+            @HoldRelase.canceled += instance.OnHoldRelase;
         }
 
         /// <summary>
@@ -394,6 +424,9 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
             @Hold.started -= instance.OnHold;
             @Hold.performed -= instance.OnHold;
             @Hold.canceled -= instance.OnHold;
+            @HoldRelase.started -= instance.OnHoldRelase;
+            @HoldRelase.performed -= instance.OnHoldRelase;
+            @HoldRelase.canceled -= instance.OnHoldRelase;
         }
 
         /// <summary>
@@ -455,5 +488,12 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnHold(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "HoldRelase" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHoldRelase(InputAction.CallbackContext context);
     }
 }

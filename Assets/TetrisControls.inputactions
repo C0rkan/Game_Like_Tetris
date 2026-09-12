@@ -18,8 +18,18 @@
                 },
                 {
                     "name": "Rotate",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "67a0f093-1373-45e5-99a1-263972f9da1a",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                },
+                {
+                    "name": "Hold",
+                    "type": "Button",
+                    "id": "62c2b9a6-9a39-4cf4-b471-22b0280eb9ab",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -27,9 +37,9 @@
                     "priority": 0
                 },
                 {
-                    "name": "Hold",
+                    "name": "HoldRelase",
                     "type": "Button",
-                    "id": "62c2b9a6-9a39-4cf4-b471-22b0280eb9ab",
+                    "id": "d94166b2-3819-4583-9d8f-7c32fbfa7fa4",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -57,6 +67,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Hold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dfd4559b-3e36-46eb-b555-a108264790fc",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HoldRelase",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

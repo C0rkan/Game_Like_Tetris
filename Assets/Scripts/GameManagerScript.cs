@@ -30,18 +30,14 @@ public class GameManagerScript : MonoBehaviour
 
 
         tetrisControls.TetrisPlayer.Rotate.performed += context => RotateBlocks();
-        if (1 == 1) {
-            if (spawner.anyBlockHolded == true) {
-                HoldBlockRelase();
-            }
-            if (spawner.anyBlockHolded == false) {
-                HoldBlock();
-            }
-            tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlock();
-            tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlockRelase();
-
-        }
         tetrisControls.TetrisPlayer.Movement.started += context => MoveBlocks(context);
+        
+        if (spawner.anyBlockHolded) {
+            tetrisControls.TetrisPlayer.HoldRelase.performed += context => HoldBlockRelase();
+        }
+        else {
+            tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlock();
+        }
     }
 
     private void Update() {
@@ -199,23 +195,24 @@ public class GameManagerScript : MonoBehaviour
     }
    
     private void HoldBlock() {
-        if (spawner.currentBlock != null && spawner.holdedBlock == null && spawner.anyBlockHolded == false) {
+        if (spawner.currentBlock != null && spawner.holdedBlock == null && !spawner.anyBlockHolded) {
             spawner.holdedBlock = spawner.currentBlock;
-            //spawner.holdedBlock.transform.position = spawner.holdBlockPosition.position;
-            //spawner.currentBlock = spawner.nextBlock;
-            //spawner.nextBlock = null;
+            spawner.holdedBlock.transform.position = spawner.holdBlockPosition.position;
+            spawner.currentBlock = spawner.nextBlock;
+            spawner.currentBlock.transform.position = spawner.spawnLocation.position;
+
             spawner.anyBlockHolded = true;
+            spawner.nextBlock = null;
         }
     }
 
     private void HoldBlockRelase() {
-        if (spawner.currentBlock != null && spawner.holdedBlock != null && spawner.anyBlockHolded == true) {
-            spawner.currentBlock = spawner.holdedBlock;
-            spawner.holdedBlock.transform.position = spawner.spawnLocation.position;
+        if (spawner.currentBlock != null && spawner.holdedBlock != null && spawner.anyBlockHolded) {
             Destroy(spawner.currentBlock);
-
-
-            spawner.canSpawnBlock = true;
+            spawner.currentBlock = spawner.holdedBlock;
+            spawner.currentBlock.transform.position = spawner.spawnLocation.position;
+            
+            spawner.holdedBlock = null;
             spawner.anyBlockHolded = false;
         }
     }

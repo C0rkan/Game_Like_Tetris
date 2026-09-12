@@ -28,7 +28,8 @@ public class SpawnerScript : MonoBehaviour {
         if (canSpawnBlock && currentBlock == null) {
             SpawnBlock(spawnLocation);
         }
-        SpawnNextBlock(nextBlockPosition);
+        if(nextBlock == null)
+            SpawnNextBlock(nextBlockPosition);
     }
 
     public void SpawnBlock(Transform spawnLocation) {
