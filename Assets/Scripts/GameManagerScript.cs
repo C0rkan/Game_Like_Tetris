@@ -15,7 +15,7 @@ public class GameManagerScript : MonoBehaviour
 {
     public SpawnerScript spawner { get; private set; }
     private TetrisControls tetrisControls;
-    
+    bool canFastDrop = true;
 
 
 
@@ -31,13 +31,9 @@ public class GameManagerScript : MonoBehaviour
 
         tetrisControls.TetrisPlayer.Rotate.performed += context => RotateBlocks();
         tetrisControls.TetrisPlayer.Movement.started += context => MoveBlocks(context);
-        
-        if (spawner.anyBlockHolded) {
-            tetrisControls.TetrisPlayer.HoldRelase.performed += context => HoldBlockRelase();
-        }
-        else {
-            tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlock();
-        }
+        tetrisControls.TetrisPlayer.Hold.performed += context => HoldBlock();
+        tetrisControls.TetrisPlayer.FastDrop.performed += context => FastDrop();
+
     }
 
     private void Update() {
@@ -191,9 +187,27 @@ public class GameManagerScript : MonoBehaviour
         if (!isPositionAvailable(spawner.currentBlock.transform)) {
             spawner.currentBlock.transform.position -= moveY;
         }
-
     }
-   
+
+    private void FastDrop() {
+
+        if (spawner == null && spawner.currentBlock == null) {
+            return;
+        }
+
+        while (true) {
+            spawner.currentBlock.transform.position += new Vector3(0, -1, 0);
+
+            if (!isPositionAvailable(spawner.currentBlock.transform)) {
+                spawner.currentBlock.transform.position += new Vector3(0, 1, 0);
+                break;
+            }
+        }
+        AddToGrid(spawner.currentBlock.transform);
+        LineCheck();
+    }
+
+
     private void HoldBlock() {
         if (spawner.currentBlock != null && spawner.holdedBlock == null && !spawner.anyBlockHolded) {
             spawner.holdedBlock = spawner.currentBlock;
@@ -204,20 +218,16 @@ public class GameManagerScript : MonoBehaviour
             spawner.anyBlockHolded = true;
             spawner.nextBlock = null;
         }
-    }
-
-    private void HoldBlockRelase() {
-        if (spawner.currentBlock != null && spawner.holdedBlock != null && spawner.anyBlockHolded) {
-            Destroy(spawner.currentBlock);
+        else if(spawner.currentBlock != null && spawner.holdedBlock != null && spawner.anyBlockHolded) {
+            GameObject temp = spawner.currentBlock;
             spawner.currentBlock = spawner.holdedBlock;
+            spawner.holdedBlock= temp;
+
             spawner.currentBlock.transform.position = spawner.spawnLocation.position;
-            
-            spawner.holdedBlock = null;
-            spawner.anyBlockHolded = false;
+            spawner.holdedBlock.transform.position = spawner.holdBlockPosition.position;
         }
     }
     
-
     private void OnEnable() {
         tetrisControls.Enable();
     }

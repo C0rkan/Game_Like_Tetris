@@ -123,9 +123,9 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
                     ""priority"": 0
                 },
                 {
-                    ""name"": ""HoldRelase"",
+                    ""name"": ""FastDrop"",
                     ""type"": ""Button"",
-                    ""id"": ""d94166b2-3819-4583-9d8f-7c32fbfa7fa4"",
+                    ""id"": ""5afebbde-114e-49ed-84f2-f6699d11f0ba"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -148,22 +148,11 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""dacc42e3-8c4b-4088-8c1d-7de3a792fbb2"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Hold"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""dfd4559b-3e36-46eb-b555-a108264790fc"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""HoldRelase"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -243,6 +232,17 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53b4e899-9f16-4d44-a96d-bc9dec749885"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""FastDrop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -254,7 +254,7 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
         m_TetrisPlayer_Movement = m_TetrisPlayer.FindAction("Movement", throwIfNotFound: true);
         m_TetrisPlayer_Rotate = m_TetrisPlayer.FindAction("Rotate", throwIfNotFound: true);
         m_TetrisPlayer_Hold = m_TetrisPlayer.FindAction("Hold", throwIfNotFound: true);
-        m_TetrisPlayer_HoldRelase = m_TetrisPlayer.FindAction("HoldRelase", throwIfNotFound: true);
+        m_TetrisPlayer_FastDrop = m_TetrisPlayer.FindAction("FastDrop", throwIfNotFound: true);
     }
 
     ~@TetrisControls()
@@ -338,7 +338,7 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_TetrisPlayer_Movement;
     private readonly InputAction m_TetrisPlayer_Rotate;
     private readonly InputAction m_TetrisPlayer_Hold;
-    private readonly InputAction m_TetrisPlayer_HoldRelase;
+    private readonly InputAction m_TetrisPlayer_FastDrop;
     /// <summary>
     /// Provides access to input actions defined in input action map "Tetris Player".
     /// </summary>
@@ -363,9 +363,9 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Hold => m_Wrapper.m_TetrisPlayer_Hold;
         /// <summary>
-        /// Provides access to the underlying input action "TetrisPlayer/HoldRelase".
+        /// Provides access to the underlying input action "TetrisPlayer/FastDrop".
         /// </summary>
-        public InputAction @HoldRelase => m_Wrapper.m_TetrisPlayer_HoldRelase;
+        public InputAction @FastDrop => m_Wrapper.m_TetrisPlayer_FastDrop;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -401,9 +401,9 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
             @Hold.started += instance.OnHold;
             @Hold.performed += instance.OnHold;
             @Hold.canceled += instance.OnHold;
-            @HoldRelase.started += instance.OnHoldRelase;
-            @HoldRelase.performed += instance.OnHoldRelase;
-            @HoldRelase.canceled += instance.OnHoldRelase;
+            @FastDrop.started += instance.OnFastDrop;
+            @FastDrop.performed += instance.OnFastDrop;
+            @FastDrop.canceled += instance.OnFastDrop;
         }
 
         /// <summary>
@@ -424,9 +424,9 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
             @Hold.started -= instance.OnHold;
             @Hold.performed -= instance.OnHold;
             @Hold.canceled -= instance.OnHold;
-            @HoldRelase.started -= instance.OnHoldRelase;
-            @HoldRelase.performed -= instance.OnHoldRelase;
-            @HoldRelase.canceled -= instance.OnHoldRelase;
+            @FastDrop.started -= instance.OnFastDrop;
+            @FastDrop.performed -= instance.OnFastDrop;
+            @FastDrop.canceled -= instance.OnFastDrop;
         }
 
         /// <summary>
@@ -489,11 +489,11 @@ public partial class @TetrisControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnHold(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "HoldRelase" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "FastDrop" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnHoldRelase(InputAction.CallbackContext context);
+        void OnFastDrop(InputAction.CallbackContext context);
     }
 }
