@@ -22,6 +22,15 @@ public class GameManagerScript : MonoBehaviour
     public TextMeshProUGUI timeTxt;
 
     private float timePassed;
+    
+    [Header("Score")]
+    private int score = 0;
+    private float currentMultiplier;
+    private float comboTimer;
+    private float comboDuration = 10f;
+    private bool lineCleared = false;
+    private bool isComboActive = false;
+
 
     [Header("Gravity")]
     private float fallTimer = 0;
@@ -44,6 +53,9 @@ public class GameManagerScript : MonoBehaviour
         fallTimer += Time.deltaTime;
         GraviyForBlocks();
         TimeManager();
+        ScoreManager();
+        
+
     }
 
     public bool isPositionAvailable(Transform blockTransform) {
@@ -113,7 +125,9 @@ public class GameManagerScript : MonoBehaviour
             Destroy(GridScript.grids[x, y].gameObject);
             //Silinen alanlarý boþ olarak geri tanýmlýyoruz.
             GridScript.grids[x,y]= null;
+            lineCleared = true;
         }
+        
     }
 
     private void DropLine(int startY) {
@@ -244,8 +258,46 @@ public class GameManagerScript : MonoBehaviour
 
     private void ScoreManager() {
 
+        if (lineCleared && scoreTxt != null) {
+            AddScore();
+            scoreTxt.text = $"Score : {score}";
+            lineCleared = false;
+        }
+
+
     }
-    
+
+    private void AddScore() {
+
+        int baseScore = 200;
+        float scoreMultiplier = 1.5f;
+
+        if (isComboActive) {
+            currentMultiplier = scoreMultiplier;
+        }
+        else {
+            currentMultiplier = 1f;
+        }
+
+        int earnedPoint = Mathf.RoundToInt(baseScore * currentMultiplier);
+        score += earnedPoint;
+
+        comboTimer = comboDuration;
+        isComboActive = true;
+    }
+
+    private void ScoreComboTimer() {
+
+        if (!isComboActive) return;
+
+        comboTimer -= Time.deltaTime;
+
+        if (comboTimer<=0) {
+            comboTimer = 0;
+            isComboActive = false;
+        }
+    }
+
     private void OnEnable() {
         tetrisControls.Enable();
     }
